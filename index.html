@@ -32,10 +32,9 @@
 
   <style>
     :root {
-      /* Deep Blue and Glowing Pink Theme */
-      --primary: #ff007f; /* Glowing Pink */
-      --accent: #001d47;  /* Deep Blue */
-      --bg: #000c1d;      /* Very Dark Blue Background */
+      --primary: #ff007f;
+      --accent: #001d47;
+      --bg: #000c1d;
       --text: #ffffff;
       --loader-bg: #000c1d;
       --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -44,105 +43,67 @@
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      height: 100dvh;
-      overflow: hidden;
+      margin: 0; padding: 0;
+      width: 100%; height: 100%;
+      height: 100dvh; overflow: hidden;
       background-color: var(--bg);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     .app-wrapper {
       position: relative;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
     }
 
-    /* Iframe Optimization */
     #main-app {
-      flex: 1;
-      width: 100%;
-      height: 100%;
-      border: none;
-      opacity: 0;
+      flex: 1; width: 100%; height: 100%;
+      border: none; opacity: 0;
       transition: var(--transition);
       z-index: 1;
     }
 
-    #main-app.loaded {
-      opacity: 1;
-    }
+    #main-app.loaded { opacity: 1; }
 
-    /* Loader Overlay */
     .loader-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
       background: var(--loader-bg);
-      z-index: 100;
-      transition: var(--transition);
+      z-index: 100; transition: var(--transition);
     }
 
-    .spinner-box {
-      position: relative;
-      width: 65px;
-      height: 65px;
-    }
+    .spinner-box { position: relative; width: 65px; height: 65px; }
 
     .spinner {
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       border: 3px solid rgba(255, 0, 127, 0.1);
       border-top: 3px solid var(--primary);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
-      box-shadow: 0 0 15px rgba(255, 0, 127, 0.5); /* Glowing Effect */
+      box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
     }
 
     .loading-status {
-      margin-top: 25px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--primary);
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      margin-top: 25px; font-size: 0.85rem;
+      font-weight: 700; color: var(--primary);
+      letter-spacing: 2px; text-transform: uppercase;
       text-shadow: 0 0 10px rgba(255, 0, 127, 0.4);
     }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    .hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
+    .hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    /* Background Pulse for Deep Blue Feel */
     .loader-overlay::before {
-      content: '';
-      position: absolute;
-      width: 300px;
-      height: 300px;
+      content: ''; position: absolute;
+      width: 300px; height: 300px;
       background: var(--primary);
-      filter: blur(100px);
-      opacity: 0.15;
+      filter: blur(100px); opacity: 0.15;
       animation: pulse 3s infinite ease-in-out;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.1; transform: scale(1); }
-      50% { opacity: 0.2; transform: scale(1.3); }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 0.1; transform: scale(1); } 50% { opacity: 0.2; transform: scale(1.3); } }
   </style>
 </head>
 <body>
@@ -157,7 +118,7 @@
 
     <iframe
       id="main-app"
-      src="https://script.google.com/macros/s/AKfycbyH2dt2M5xDJVOavth-UwS3xvOjAScMhvtBBHwYuWI0XtrgDQmxaLljrc4AaY0ukS-h/exec?p=rate"
+      src="about:blank"
       title="FaxGer Global Logistics Dashboard"
       allow="geolocation; camera; clipboard-write"
       loading="eager">
@@ -169,17 +130,41 @@
     const loader = document.getElementById('loader');
     const statusText = document.getElementById('status-text');
 
-    // 1. Smooth Transition Logic
+    // --- ডাইনামিক লিঙ্ক লজিক শুরু ---
+    
+    // ১. আপনার মূল অ্যাপ স্ক্রিপ্ট লিঙ্ক
+    const scriptBaseUrl = "https://script.google.com/macros/s/AKfycbwppa8WNtYC8_bHHBN-4wKvaCDNfulv6Z83t0T0ItzRRwy1e5eHZvzXcVUmQM3Rd3Aa/exec?p=rate";
+
+    // ২. URL থেকে প্যারামিটার ধরা (যেমন: ?p=track)
+    const urlParams = new URLSearchParams(window.location.search);
+    const pageType = urlParams.get('p'); 
+
+    // ৩. কন্ডিশন অনুযায়ী লিঙ্ক তৈরি
+    let finalUrl = scriptBaseUrl;
+
+    if (pageType === 'home') {
+      finalUrl += "?route=home"; // আপনার স্ক্রিপ্টে যেভাবে হ্যান্ডেল করেছেন
+    } else if (pageType === 'track') {
+      finalUrl += "?route=track";
+    } else if (pageType === 'rate') {
+      finalUrl += "?route=rate";
+    }
+
+    // ৪. আইফ্রেমে লিঙ্কটি পাঠিয়ে দেওয়া
+    iframe.src = finalUrl;
+
+    // --- ডাইনামিক লিঙ্ক লজিক শেষ ---
+
+    // Smooth Transition Logic
     iframe.onload = function() {
       statusText.innerText = "Syncing with Server...";
-      
       setTimeout(() => {
         iframe.classList.add('loaded');
         loader.classList.add('hidden');
       }, 800);
     };
 
-    // 2. Network Check
+    // Network Check
     window.addEventListener('offline', () => {
       statusText.innerText = "Offline - Check Connection";
       statusText.style.color = "#ff4757";
@@ -190,7 +175,7 @@
       statusText.style.color = "var(--primary)";
     });
 
-    // 3. Fallback
+    // Fallback
     setTimeout(() => {
       if (!iframe.classList.contains('loaded')) {
         iframe.classList.add('loaded');
@@ -198,7 +183,7 @@
       }
     }, 15000);
 
-    // 4. iOS Scale Fix
+    // iOS Scale Fix
     document.addEventListener('touchmove', function (e) {
       if (e.scale !== 1) { e.preventDefault(); }
     }, { passive: false });
